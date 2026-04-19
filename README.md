@@ -1,21 +1,23 @@
-# React + TypeScript + Vite
+# omarfaruk.bd
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio of **Omar Faruk** — product engineer with a security habit.
 
-While this project uses React, Vite supports many popular JS frameworks. [See all the supported frameworks](https://vitejs.dev/guide/#scaffolding-your-first-vite-project).
+Single static HTML file. No build step, no framework. The halftone portrait is rendered live via a small canvas routine; the source image is inlined as base64. Terminal/system aesthetic, dark + light themes, responsive, konami-code easter egg.
 
-## Deploy Your Own
+- **Live:** https://omarfaruk.bd
+- **Deploy:** static site on Vercel
+- **Entry:** `index.html`
+- **Social card:** `og.png`
+- **Analytics:** [onedollarstats](https://onedollarstats.com) (`stonks.js`)
 
-Deploy your own Vite project with Vercel.
+## Local preview
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/framework-boilerplates/vite-react&template=vite-react)
+Any static server works:
 
-_Live Example: https://vite-react-example.vercel.app_
-
-### Deploying From Your Terminal
-
-You can deploy your new Vite project with a single command from your terminal using [Vercel CLI](https://vercel.com/download):
-
-```shell
-$ vercel
+```sh
+python3 -m http.server 8080
+# or
+bunx serve .
 ```
+
+Then open http://localhost:8080.
