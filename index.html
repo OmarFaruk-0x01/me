@@ -3196,6 +3196,16 @@
             const btn = document.getElementById('themeBtn');
             if (btn) btn.textContent = v === 'light' ? '[ dark mode ]' : '[ light mode ]';
             try {localStorage.setItem(THEME_KEY, v);} catch (e) { }
+            if (changed && animate) trackEvent('theme_change', { to: v });
+        }
+
+        // Analytics helper — safely calls onedollarstats if loaded, no-op otherwise.
+        function trackEvent(name, props) {
+            try {
+                const s = window.stonks;
+                if (typeof s === 'function') return s(name, props || {});
+                if (s && typeof s.event === 'function') return s.event(name, props || {});
+            } catch (e) { /* silent */ }
         }
         applyTheme(theme);
 
@@ -3530,7 +3540,34 @@
             window.addEventListener('resize', updateHint, {passive: true});
             updateHint();
         })();
+
+        // Custom analytics events — avatar hover + project clicks.
+        (function () {
+            // Avatar hover: fire once per session (not on every mouseenter).
+            const idcard = document.querySelector('.idcard');
+            if (idcard) {
+                let fired = false;
+                idcard.addEventListener('mouseenter', () => {
+                    if (fired) return;
+                    fired = true;
+                    trackEvent('avatar_hover');
+                }, {passive: true});
+            }
+
+            // Project clicks: read project name + URL from onclick attribute.
+            document.querySelectorAll('.work li').forEach(li => {
+                li.addEventListener('click', () => {
+                    const name = (li.querySelector('.wname')?.textContent || '').trim();
+                    const handler = li.getAttribute('onclick') || '';
+                    const url = handler.match(/['"]([^'"]+)['"]/)?.[1] || null;
+                    trackEvent('project_click', {project: name, url});
+                });
+            });
+        })();
     </script>
+
+    <!-- Analytics: onedollarstats -->
+    <script defer src="https://assets.onedollarstats.com/stonks.js"></script>
 
 </body>
 
