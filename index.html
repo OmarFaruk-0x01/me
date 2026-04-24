@@ -3161,10 +3161,14 @@
         // Always default to dark. User preference (if toggled) is stored in localStorage.
         let theme = localStorage.getItem(THEME_KEY) || 'dark';
 
+        // Safari's View Transition API stacks old/new snapshots instead of overlapping them
+        // (noticeable with filter: drop-shadow on ::view-transition-new). Skip the wipe there.
+        const _isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent);
+
         function applyTheme(v, animate) {
             const changed = (theme !== v);
             const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const canWipe = changed && animate && !reduced && typeof document.startViewTransition === 'function';
+            const canWipe = changed && animate && !reduced && !_isSafari && typeof document.startViewTransition === 'function';
 
             const commit = () => {
                 theme = v;
